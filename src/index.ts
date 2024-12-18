@@ -1,9 +1,10 @@
 import express, { NextFunction, Request, Response } from 'express'
+import { PORT } from './environment/env'
 
 const app = express()
 
 const prefix = "/api"
-const port = 3000
+const port = PORT
 
 app.get(`${prefix}/auth`, 
   async (req: Request, res: Response, next: NextFunction) => {
