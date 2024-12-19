@@ -9,7 +9,9 @@ routes.post('/register', async (req: Request, res: Response, next: NextFunction)
     const response = await RegisterController(req)
     res.status(201).json(response)
   } catch (error) {
-    throw error
+    if (error instanceof Error) {
+      res.status(500).json(error.message)
+    }
   }
 })
 
