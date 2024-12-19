@@ -1,15 +1,14 @@
 import express, { NextFunction, Request, Response } from 'express'
 import { PORT } from './environment/env'
+import authRoutes from "./modules/auth/routes"
 
 const app = express()
 
+app.use(express.json())
 const prefix = "/api"
-const port = PORT
+app.use(`${prefix}/auth`, authRoutes)
 
-app.get(`${prefix}/auth`, 
-  async (req: Request, res: Response, next: NextFunction) => {
-  res.send('Hola mundo')
-})
+const port = PORT
 
 app.listen(port, () => {
   console.log(`El servidor está corriendo en el puerto: ${port}`)
