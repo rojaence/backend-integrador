@@ -16,4 +16,9 @@ export class AuthService {
     const newUser = await this._authRepository.createUser({ username, password })
     return HttpResponse.response(CodesHttpEnum.created, newUser, 'Usuario creado con éxito')
   }
+
+  async loginService(username: string, password: string) {
+    const response = await this._authRepository.loginUser(username, password)
+    return HttpResponse.response(CodesHttpEnum.ok, response, 'Usuario logueado con éxito')
+  }
 }
