@@ -1,21 +1,18 @@
 import { IUser } from "../../interfaces/Auth.interface";
 import fs from 'fs/promises';
-import path from 'path';
 import { sign } from 'jsonwebtoken'
 import { JWT_SECRET } from "../../environment/env";
+import { dataUsersFilePath } from "../../constants";
 
 /* const users: IUser[] = [] */
 //const dataFilePath = path.join(__dirname, '../../../data/users.json');
-const dataFilePath = path.join('src', 'data', 'users.json');
-
-
 
 export default class AuthRepository {
 
   
   async readUsers(): Promise<IUser[]> {
     try {
-      const data = await fs.readFile(dataFilePath, 'utf-8');
+      const data = await fs.readFile(dataUsersFilePath, 'utf-8');
       return JSON.parse(data);
     } catch (error) {
       console.error(error);
@@ -23,7 +20,7 @@ export default class AuthRepository {
     }
   }
   async writeUsers(users: IUser[]): Promise<void> {
-    await fs.writeFile(dataFilePath, JSON.stringify(users, null, 2), 'utf-8');
+    await fs.writeFile(dataUsersFilePath, JSON.stringify(users, null, 2), 'utf-8');
   }
 
   async createUser(user: IUser): Promise<IUser> {
