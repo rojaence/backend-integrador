@@ -3,36 +3,24 @@ import fs from 'fs/promises';
 import { sign } from 'jsonwebtoken'
 import { JWT_SECRET } from "../../environment/env";
 import { dataUsersFilePath } from "../../constants";
+import { ICreateUserDTO } from "../../interfaces/User.interface";
+import UserJSONFileManager from "../../utils/userJSONDatabase";
 
 /* const users: IUser[] = [] */
 //const dataFilePath = path.join(__dirname, '../../../data/users.json');
 
-export default class AuthRepository {
+export default class AuthRepository extends UserJSONFileManager {
 
-  
-  async readUsers(): Promise<IUser[]> {
-    try {
-      const data = await fs.readFile(dataUsersFilePath, 'utf-8');
-      return JSON.parse(data);
-    } catch (error) {
-      console.error(error);
-      return [];
+  async createUser(user: ICreateUserDTO): Promise<IUser> {
+    const users = await this.readUsers();
+    const newId = await this.getNewId()
+    const newUser = {
+      id: newId,
+      ...user
     }
-  }
-  async writeUsers(users: IUser[]): Promise<void> {
-    await fs.writeFile(dataUsersFilePath, JSON.stringify(users, null, 2), 'utf-8');
-  }
-
-  async createUser(user: IUser): Promise<IUser> {
-    const users = await this.readUsers();
-    users.push(user);
+    users.push(newUser);
     await this.writeUsers(users);
-    return user
-  }
-
-  async findByUserName(username: string) {
-    const users = await this.readUsers();
-    return users.find(u => u.username.toLocaleLowerCase() === username.toLocaleLowerCase())
+    return newUser
   }
 
   async loginUser(username: string, password: string) {

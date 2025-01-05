@@ -21,4 +21,12 @@ export default class UserJSONFileManager {
     const users = await this.readUsers();
     return users.find(u => u.username.toLocaleLowerCase() === username.toLocaleLowerCase())
   }
+
+  async getNewId() {
+    const users = await this.readUsers();
+    const ids = users.map(u => u.id)
+    if (ids.length === 0) return 1
+    let newId = Math.max(...ids) + 1
+    return newId
+  }
 }
