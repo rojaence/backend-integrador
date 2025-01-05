@@ -12,3 +12,8 @@ export const idParamValidation = {
     id: Joi.number().required()
   })
 }
+
+export const putValidation = {
+  params: idParamValidation.params,
+  body: createValidation.body
+}

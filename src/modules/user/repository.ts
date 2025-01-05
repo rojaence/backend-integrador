@@ -1,6 +1,6 @@
 import UserJSONFileManager from '../../utils/userJSONDatabase';
 import { IUser } from '../../interfaces/Auth.interface';
-import { ICreateUserDTO } from '../../interfaces/User.interface';
+import { ICreateUserDTO, TPutUserData } from '../../interfaces/User.interface';
 
 export default class UserRepository extends UserJSONFileManager {
   
@@ -31,5 +31,17 @@ export default class UserRepository extends UserJSONFileManager {
     const userIndex = users.findIndex(u => u.id === id)
     users.splice(userIndex, 1)
     await this.writeUsers(users)
+  }
+
+  async putUser(id: number, newData: TPutUserData) {
+    const users = await this.readUsers()
+    const userIndex = users.findIndex(u => u.id === id)
+    const newUserData = {
+      id,
+      ...newData
+    }
+    users.splice(userIndex, 1, newUserData)
+    await this.writeUsers(users)
+    return newUserData
   }
 }

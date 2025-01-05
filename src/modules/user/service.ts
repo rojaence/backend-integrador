@@ -1,5 +1,5 @@
 import { CodesHttpEnum } from "../../enums/codesHttpEnums"
-import { ICreateUserDTO } from "../../interfaces/User.interface"
+import { ICreateUserDTO, TPutUserData } from "../../interfaces/User.interface"
 import { HttpResponse } from "../../utils/httpResponse"
 import UserRepository from "./repository"
 
@@ -39,5 +39,18 @@ export class UserService {
     }
     await this._userRepository.deleteUser(id)
     return HttpResponse.response(CodesHttpEnum.ok, null, "Usuario eliminado con éxito")
+  }
+
+  async putUser(id: number, data: TPutUserData) {
+    const existingUser = await this._userRepository.getById(id)
+    const existingUsername = await this._userRepository.findByUserName(data.username)
+    if (!existingUser)  {
+      return HttpResponse.response(CodesHttpEnum.notFound, null, "Usuario no encontrado")
+    }
+    if (existingUsername && existingUsername.username === data.username && id !== existingUsername.id) {
+      return HttpResponse.response(CodesHttpEnum.badRequest, null, "El nombre de usuario ya existe")
+    }
+    const updatedUser = await this._userRepository.putUser(id, data)
+    return HttpResponse.response(CodesHttpEnum.ok, updatedUser, "Usuario actualizado con éxito")
   }
 }

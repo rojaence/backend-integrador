@@ -6,8 +6,6 @@ export interface ICreateUserDTO {
   password: string
 }
 
-export interface IUserByIdRequest {
-  id: number
-}
+export type TPutUserData = Omit<IUser, "id">
 
 export type TUserProfile = Omit<IUser, "password">

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { CodesHttpEnum } from "../../enums/codesHttpEnums";
 import { HttpResponse } from "../../utils/httpResponse";
-import { CreateController, GetByIdController, GetController, DeleteController } from "./controller";
-import { createValidation, idParamValidation } from "./validations";
+import { CreateController, GetByIdController, GetController, DeleteController, PutController } from "./controller";
+import { createValidation, idParamValidation, putValidation } from "./validations";
 import { validate } from "express-validation";
 
 const routes = Router()
@@ -50,6 +50,20 @@ routes.delete('/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const response = await DeleteController(req)
+      res.status(response.code).json(response)
+    } catch (error) {
+      if (error instanceof Error) {
+        HttpResponse.fail(res, CodesHttpEnum.internalServerError, error.message)
+      }
+    }
+  }
+)
+
+routes.put('/:id',
+  validate(putValidation, {}, {}) as any,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await PutController(req)
       res.status(response.code).json(response)
     } catch (error) {
       if (error instanceof Error) {
