@@ -1,8 +1,16 @@
 import UserJSONFileManager from '../../utils/userJSONDatabase';
 import { IUser } from '../../interfaces/Auth.interface';
 import { ICreateUserDTO, TPutUserData } from '../../interfaces/User.interface';
+import BcryptHash from '../../utils/bcryptHash';
 
 export default class UserRepository extends UserJSONFileManager {
+  
+  private bcryptHash;
+
+  constructor() {
+    super()
+    this.bcryptHash = new BcryptHash()
+  }
   
   async getUsers(): Promise<IUser[]> {
     return await this.readUsers()
@@ -11,9 +19,13 @@ export default class UserRepository extends UserJSONFileManager {
   async createUser(user: ICreateUserDTO): Promise<IUser> {
     const users = await this.readUsers();
     const newId = await this.getNewId()
+
+    const passwordHash = await this.bcryptHash.genPasswordHash(user.password)
+    
     const newUser = {
       id: newId,
-      ...user
+      ...user,
+      password: passwordHash
     }
     users.push(newUser);
     await this.writeUsers(users);

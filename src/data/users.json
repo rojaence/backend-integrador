@@ -2,16 +2,6 @@
   {
     "id": 1,
     "username": "rojaence",
-    "password": "admin123"
-  },
-  {
-    "id": 2,
-    "username": "luis",
-    "password": "user123"
-  },
-  {
-    "id": 3,
-    "username": "deleteme",
-    "password": "user123"
+    "password": "$2b$10$k//BFIP3nNSCZQFxMsSo6eAcuktJZNmmSx52MEomncnhte5UmXjjy"
   }
 ]

@@ -1,22 +1,29 @@
 import { IUser } from "../../interfaces/Auth.interface";
-import fs from 'fs/promises';
 import { sign } from 'jsonwebtoken'
 import { JWT_SECRET } from "../../environment/env";
-import { dataUsersFilePath } from "../../constants";
 import { ICreateUserDTO } from "../../interfaces/User.interface";
 import UserJSONFileManager from "../../utils/userJSONDatabase";
-
-/* const users: IUser[] = [] */
-//const dataFilePath = path.join(__dirname, '../../../data/users.json');
+import BcryptHash from "../../utils/bcryptHash";
 
 export default class AuthRepository extends UserJSONFileManager {
+
+  private bcryptHash;
+
+  constructor() {
+    super()
+    this.bcryptHash = new BcryptHash()
+  }
 
   async createUser(user: ICreateUserDTO): Promise<IUser> {
     const users = await this.readUsers();
     const newId = await this.getNewId()
+
+    const passwordHash = await this.bcryptHash.genPasswordHash(user.password)
+
     const newUser = {
       id: newId,
-      ...user
+      ...user,
+      password: passwordHash,
     }
     users.push(newUser);
     await this.writeUsers(users);
@@ -28,7 +35,9 @@ export default class AuthRepository extends UserJSONFileManager {
     if (!userDB) {
       throw new Error('El usuario no existe')
     }
-    if (userDB.password !== password) {
+    const passwordChecked = await this.bcryptHash.chechPasswordHash(password, userDB.password)
+
+    if (!passwordChecked) {
       throw new Error('Credenciales incorrectas')
     }
 
