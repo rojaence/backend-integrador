@@ -21,7 +21,7 @@ export default class UserRepository extends UserJSONFileManager {
     const newId = await this.getNewId()
 
     const passwordHash = await this.bcryptHash.genPasswordHash(user.password)
-    
+
     const newUser = {
       id: newId,
       ...user,
@@ -48,9 +48,11 @@ export default class UserRepository extends UserJSONFileManager {
   async putUser(id: number, newData: TPutUserData) {
     const users = await this.readUsers()
     const userIndex = users.findIndex(u => u.id === id)
+    const password = await this.bcryptHash.genPasswordHash(newData.password)
     const newUserData = {
       id,
-      ...newData
+      ...newData,
+      password
     }
     users.splice(userIndex, 1, newUserData)
     await this.writeUsers(users)

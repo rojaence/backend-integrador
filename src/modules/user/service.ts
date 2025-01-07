@@ -18,7 +18,7 @@ export class UserService {
   async createUser(data: ICreateUserDTO) {
     const existingUser = await this._userRepository.findByUserName(data.username)
     if (existingUser) {
-      throw new Error("El usuario ya existe")
+      return HttpResponse.response(CodesHttpEnum.badRequest, 'Error en autenticación', "El usuario ya existe")
     }
     const newUser = await this._userRepository.createUser(data)
     return HttpResponse.response(CodesHttpEnum.created, newUser, "Usuario creado con éxito")

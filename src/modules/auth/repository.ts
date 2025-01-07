@@ -4,6 +4,7 @@ import { JWT_SECRET } from "../../environment/env";
 import { ICreateUserDTO } from "../../interfaces/User.interface";
 import UserJSONFileManager from "../../utils/userJSONDatabase";
 import BcryptHash from "../../utils/bcryptHash";
+import ValidationException from "../../exceptions/ValidationException";
 
 export default class AuthRepository extends UserJSONFileManager {
 
@@ -33,12 +34,12 @@ export default class AuthRepository extends UserJSONFileManager {
   async loginUser(username: string, password: string) {
     const userDB = await this.findByUserName(username)
     if (!userDB) {
-      throw new Error('El usuario no existe')
+      throw new ValidationException('El usuario no existe')
     }
     const passwordChecked = await this.bcryptHash.chechPasswordHash(password, userDB.password)
 
     if (!passwordChecked) {
-      throw new Error('Credenciales incorrectas')
+      throw new ValidationException('Credenciales incorrectas')
     }
 
     const token = sign({ username: userDB.username }, JWT_SECRET)
