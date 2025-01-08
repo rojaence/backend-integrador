@@ -1,6 +1,6 @@
 import UserJSONFileManager from '../../utils/userJSONDatabase';
 import { IUser } from '../../interfaces/Auth.interface';
-import { ICreateUserDTO, TPutUserData } from '../../interfaces/User.interface';
+import { TCreateUserDTO, TPutUserData } from '../../interfaces/User.interface';
 import BcryptHash from '../../utils/bcryptHash';
 
 export default class UserRepository extends UserJSONFileManager {
@@ -16,7 +16,7 @@ export default class UserRepository extends UserJSONFileManager {
     return await this.readUsers()
   }
 
-  async createUser(user: ICreateUserDTO): Promise<IUser> {
+  async createUser(user: TCreateUserDTO): Promise<IUser> {
     const users = await this.readUsers();
     const newId = await this.getNewId()
 

@@ -1,5 +1,5 @@
 import { CodesHttpEnum } from "../../enums/codesHttpEnums"
-import { ICreateUserDTO, TPutUserData } from "../../interfaces/User.interface"
+import { TCreateUserDTO, TPutUserData } from "../../interfaces/User.interface"
 import { HttpResponse } from "../../utils/httpResponse"
 import UserRepository from "./repository"
 
@@ -15,11 +15,17 @@ export class UserService {
      return HttpResponse.response(CodesHttpEnum.ok, users)
   }
 
-  async createUser(data: ICreateUserDTO) {
+  async createUser(data: TCreateUserDTO) {
     const existingUser = await this._userRepository.findByUserName(data.username)
     if (existingUser) {
-      return HttpResponse.response(CodesHttpEnum.badRequest, 'Error en autenticación', "El usuario ya existe")
+      return HttpResponse.response(CodesHttpEnum.badRequest, 'Error al crear usuario', "El usuario ya existe")
     }
+
+    const existingEmail = await this._userRepository.findByEmail(data.email)
+      if (existingEmail) {
+        return HttpResponse.response(CodesHttpEnum.badRequest, 'Error al crear usuario', "Ya existe un usuario con el email proporcionado")
+      }
+
     const newUser = await this._userRepository.createUser(data)
     return HttpResponse.response(CodesHttpEnum.created, newUser, "Usuario creado con éxito")
   }

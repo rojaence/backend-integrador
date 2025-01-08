@@ -22,6 +22,11 @@ export default class UserJSONFileManager {
     return users.find(u => u.username.toLocaleLowerCase() === username.toLocaleLowerCase())
   }
 
+  async findByEmail(email: string) {
+    const users = await this.readUsers()
+    return users.find(u => u.email === email)
+  }
+
   async getNewId() {
     const users = await this.readUsers();
     const ids = users.map(u => u.id)

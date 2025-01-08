@@ -1,10 +1,11 @@
 import { IUser } from "../../interfaces/Auth.interface";
 import { sign } from 'jsonwebtoken'
 import { JWT_SECRET } from "../../environment/env";
-import { ICreateUserDTO } from "../../interfaces/User.interface";
+import { TCreateUserDTO } from "../../interfaces/User.interface";
 import UserJSONFileManager from "../../utils/userJSONDatabase";
 import BcryptHash from "../../utils/bcryptHash";
-import ValidationException from "../../exceptions/ValidationException";
+import ApiException from "../../exceptions/ApiException";
+import { CodesHttpEnum } from "../../enums/codesHttpEnums";
 
 export default class AuthRepository extends UserJSONFileManager {
 
@@ -15,7 +16,7 @@ export default class AuthRepository extends UserJSONFileManager {
     this.bcryptHash = new BcryptHash()
   }
 
-  async createUser(user: ICreateUserDTO): Promise<IUser> {
+  async createUser(user: TCreateUserDTO): Promise<IUser> {
     const users = await this.readUsers();
     const newId = await this.getNewId()
 
@@ -34,12 +35,12 @@ export default class AuthRepository extends UserJSONFileManager {
   async loginUser(username: string, password: string) {
     const userDB = await this.findByUserName(username)
     if (!userDB) {
-      throw new ValidationException('El usuario no existe')
+      throw new ApiException('El usuario no existe', CodesHttpEnum.notFound)
     }
     const passwordChecked = await this.bcryptHash.chechPasswordHash(password, userDB.password)
 
     if (!passwordChecked) {
-      throw new ValidationException('Credenciales incorrectas')
+      throw new ApiException('Credenciales incorrectas', CodesHttpEnum.badRequest)
     }
 
     const token = sign({ username: userDB.username }, JWT_SECRET)

@@ -2,6 +2,13 @@
   {
     "id": 1,
     "username": "rojaence",
+    "email": "rojaence@example.com",
     "password": "$2b$10$hgmbk1xh83lIvt84z4Whuur9MyDr5gd1sbXwK/yPYsdivvRMnd9sO"
+  },
+  {
+    "id": 2,
+    "username": "ronny",
+    "email": "rojaence@example.dev",
+    "password": "$2b$10$nfD8yenepcGp1UIK3KxAluQI9kNmYvWOsRH9ifzkZi0E4fmyK8Lga"
   }
 ]

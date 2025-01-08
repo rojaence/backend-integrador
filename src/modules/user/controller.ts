@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { UserService } from "./service";
-import { ICreateUserDTO, TPutUserData } from "../../interfaces/User.interface";
+import { TCreateUserDTO, TPutUserData } from "../../interfaces/User.interface";
 
 
 export const GetController = async (req: Request) => {
@@ -14,7 +14,7 @@ export const GetController = async (req: Request) => {
 
 export const CreateController = async (req: Request) => {
   try {
-    const CreateUserDTO = req.body as ICreateUserDTO
+    const CreateUserDTO = req.body as TCreateUserDTO
     const response = await new UserService().createUser(CreateUserDTO)
     return response
   } catch (error) {

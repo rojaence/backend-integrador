@@ -4,8 +4,8 @@ import { AuthService } from './service'
 
 export const RegisterController = async (req: Request) => {
   try {
-    const { username, password }= req.body as IUser
-    const response = await new AuthService().registerService(username, password)
+    const userData = req.body as IUser
+    const response = await new AuthService().registerService(userData)
     return response
   } catch (error) {
     throw error

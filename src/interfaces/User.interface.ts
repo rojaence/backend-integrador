@@ -1,10 +1,6 @@
 import { IUser } from "./Auth.interface";
 
-
-export interface ICreateUserDTO {
-  username: string,
-  password: string
-}
+export type TCreateUserDTO = Omit<IUser, "id">
 
 export type TPutUserData = Omit<IUser, "id">
 
