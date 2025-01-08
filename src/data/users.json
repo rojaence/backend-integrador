@@ -3,12 +3,12 @@
     "id": 1,
     "username": "rojaence",
     "email": "rojaence@example.com",
-    "password": "$2b$10$hgmbk1xh83lIvt84z4Whuur9MyDr5gd1sbXwK/yPYsdivvRMnd9sO"
+    "password": "$2b$10$hvPpJejDvkGtWrq888BxoOWyljpat/Mu6nF6Y5ICnDHxLJT12o3B."
   },
   {
     "id": 2,
-    "username": "ronny",
-    "email": "rojaence@example.dev",
-    "password": "$2b$10$nfD8yenepcGp1UIK3KxAluQI9kNmYvWOsRH9ifzkZi0E4fmyK8Lga"
+    "username": "ronnyendara",
+    "email": "ronnyend@example.com",
+    "password": "$2b$10$Mr97ste1ZpEHDOOuCKn6EOJ.AfTIxXvqdHGHNPocfKdg2SygHFrR2"
   }
 ]

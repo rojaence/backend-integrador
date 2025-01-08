@@ -40,7 +40,7 @@ export default class AuthRepository extends UserJSONFileManager {
     const passwordChecked = await this.bcryptHash.chechPasswordHash(password, userDB.password)
 
     if (!passwordChecked) {
-      throw new ApiException('Credenciales incorrectas', CodesHttpEnum.badRequest)
+      throw new ApiException('Credenciales incorrectas', CodesHttpEnum.unauthorized)
     }
 
     const token = sign({ username: userDB.username }, JWT_SECRET)

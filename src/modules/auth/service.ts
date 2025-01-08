@@ -26,7 +26,6 @@ export class AuthService {
     } catch (error) {
       throw new Error("Error en autenticación")
     }
-
   }
 
   async loginService(username: string, password: string) {
