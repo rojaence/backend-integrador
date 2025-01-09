@@ -2,6 +2,7 @@ import UserJSONFileManager from '../../utils/userJSONDatabase';
 import { IUser } from '../../interfaces/Auth.interface';
 import { TCreateUserDTO, TPutUserData } from '../../interfaces/User.interface';
 import BcryptHash from '../../utils/bcryptHash';
+import { User, IUserModel, UserCreateModel } from '../../models/User';
 
 export default class UserRepository extends UserJSONFileManager {
   
@@ -58,4 +59,29 @@ export default class UserRepository extends UserJSONFileManager {
     await this.writeUsers(users)
     return newUserData
   }
+
+  async CreateUser(payload: UserCreateModel){
+    return User.create({
+        email: payload.email,
+        password: payload.password,
+        username: payload.username,
+        birthdate: payload.birthdate
+    })
+  }
+
+  async FindUserByEmail(email: string) {
+      return User.findOne({
+          where: {
+              email
+          }
+      })
+  }
+
+  async FindUserByUsername(username: string) {
+    return User.findOne({
+        where: {
+            username
+        }
+    })
+}
 }

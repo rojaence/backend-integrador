@@ -1,11 +1,11 @@
 import {  Request } from 'express'
-import { ICredential, IUser } from '../../interfaces/Auth.interface'
+import { ICredential } from '../../interfaces/Auth.interface'
 import { AuthService } from './service'
-import { TCreateUserDTO } from '../../interfaces/User.interface'
+import { UserCreateModel } from '../../models/User'
 
 export const RegisterController = async (req: Request) => {
   try {
-    const userData = req.body as TCreateUserDTO
+    const userData = req.body as UserCreateModel
     const response = await new AuthService().registerService(userData)
     return response
   } catch (error) {

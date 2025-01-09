@@ -10,5 +10,12 @@
     "username": "ronnyendara",
     "email": "ronnyend@example.com",
     "password": "$2b$10$Mr97ste1ZpEHDOOuCKn6EOJ.AfTIxXvqdHGHNPocfKdg2SygHFrR2"
+  },
+  {
+    "id": 3,
+    "username": "ronnyendara1",
+    "email": "ronnyend@example.net",
+    "password": "$2b$10$GG.OKOkempVywWudrq6SS.JhkSf1EJ0KiYuS7Pzn95wz4kttJIOHW",
+    "datebirth": "1999-02-19"
   }
 ]
