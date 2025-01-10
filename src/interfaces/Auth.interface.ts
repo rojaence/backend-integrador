@@ -2,7 +2,8 @@ export interface IUser {
   id: number,
   email: string,
   username: string,
-  password: string
+  password: string,
+  birthdate: string
 }
 
 export interface ICredential {

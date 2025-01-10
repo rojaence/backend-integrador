@@ -2,7 +2,9 @@ import UserJSONFileManager from '../../utils/userJSONDatabase';
 import { IUser } from '../../interfaces/Auth.interface';
 import { TCreateUserDTO, TPutUserData } from '../../interfaces/User.interface';
 import BcryptHash from '../../utils/bcryptHash';
-import { User, IUserModel, UserCreateModel } from '../../models/User';
+import { User, UserCreateModel } from '../../models/User';
+import ApiException from '../../exceptions/ApiException';
+import { CodesHttpEnum } from '../../enums/codesHttpEnums';
 
 export default class UserRepository extends UserJSONFileManager {
   
@@ -72,7 +74,7 @@ export default class UserRepository extends UserJSONFileManager {
   async FindUserByEmail(email: string) {
       return User.findOne({
           where: {
-              email
+            email
           }
       })
   }
@@ -80,8 +82,38 @@ export default class UserRepository extends UserJSONFileManager {
   async FindUserByUsername(username: string) {
     return User.findOne({
         where: {
-            username
+          username
         }
     })
-}
+  }
+
+  async GetUsers() {
+    return User.findAll()
+  }
+
+  async GetById(id: number) {
+    return User.findOne({
+      where: {
+        id
+      }
+    })
+  }
+
+  async DeleteUser(id: number) {
+    return User.destroy({
+      where: {
+        id
+      }
+    })
+  }
+
+  async PutUser(id: number, newData: TPutUserData) {
+    const user = await this.GetById(id)
+    if (!user) {
+      throw new ApiException("No se encontró un usuario con el id proporcionado", CodesHttpEnum.notFound)
+    }
+    let hashPass = await this.bcryptHash.genPasswordHash(newData.password)
+    user.set("password", hashPass)
+    return user.save()
+  }
 }

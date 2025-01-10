@@ -1,5 +1,6 @@
 import { CodesHttpEnum } from '../../enums/codesHttpEnums'
 import { TCreateUserDTO, TPutUserData } from '../../interfaces/User.interface'
+import { UserCreateModel } from '../../models/User'
 import { HttpResponse } from '../../utils/httpResponse'
 import UserRepository from './repository'
 
@@ -11,17 +12,17 @@ export class UserService {
   }
 
   async getUsers() {
-    let users = await this._userRepository.getUsers()
+    let users = await this._userRepository.GetUsers()
     return HttpResponse.response(CodesHttpEnum.ok, users)
   }
 
-  async createUser(data: TCreateUserDTO) {
-    const existingUser = await this._userRepository.findByUserName(data.username)
+  async createUser(data: UserCreateModel) {
+    const existingUser = await this._userRepository.FindUserByUsername(data.username)
     if (existingUser) {
       return HttpResponse.response(CodesHttpEnum.badRequest, 'Error al crear usuario', 'El usuario ya existe')
     }
 
-    const existingEmail = await this._userRepository.findByEmail(data.email)
+    const existingEmail = await this._userRepository.FindUserByEmail(data.email)
     if (existingEmail) {
       return HttpResponse.response(
         CodesHttpEnum.badRequest,
@@ -30,12 +31,12 @@ export class UserService {
       )
     }
 
-    const newUser = await this._userRepository.createUser(data)
+    const newUser = await this._userRepository.CreateUser(data)
     return HttpResponse.response(CodesHttpEnum.created, newUser, 'Usuario creado con éxito')
   }
 
   async getById(id: number) {
-    const existingUser = await this._userRepository.getById(id)
+    const existingUser = await this._userRepository.GetById(id)
     if (!existingUser) {
       return HttpResponse.response(CodesHttpEnum.notFound, null, 'Usuario no encontrado')
     }
@@ -43,17 +44,17 @@ export class UserService {
   }
 
   async deleteUser(id: number) {
-    const existingUser = await this._userRepository.getById(id)
+    const existingUser = await this._userRepository.GetById(id)
     if (!existingUser) {
       return HttpResponse.response(CodesHttpEnum.notFound, null, 'Usuario no encontrado')
     }
-    await this._userRepository.deleteUser(id)
+    await this._userRepository.DeleteUser(id)
     return HttpResponse.response(CodesHttpEnum.ok, null, 'Usuario eliminado con éxito')
   }
 
   async putUser(id: number, data: TPutUserData) {
-    const existingUser = await this._userRepository.getById(id)
-    const existingUsername = await this._userRepository.findByUserName(data.username)
+    const existingUser = await this._userRepository.GetById(id)
+    const existingUsername = await this._userRepository.FindUserByUsername(data.username)
     if (!existingUser) {
       return HttpResponse.response(CodesHttpEnum.notFound, null, 'Usuario no encontrado')
     }
@@ -61,12 +62,12 @@ export class UserService {
       return HttpResponse.response(CodesHttpEnum.badRequest, null, 'El nombre de usuario ya existe')
     }
 
-    const existingEmail = await this._userRepository.findByEmail(data.email)
+    const existingEmail = await this._userRepository.FindUserByEmail(data.email)
     if (existingEmail && existingEmail.email === data.email && id !== existingEmail.id) {
       return HttpResponse.response(CodesHttpEnum.badRequest, null, 'El email proporcionado ya se encuentra registrado')
     }
 
-    const updatedUser = await this._userRepository.putUser(id, data)
+    const updatedUser = await this._userRepository.PutUser(id, data)
     return HttpResponse.response(CodesHttpEnum.ok, updatedUser, 'Usuario actualizado con éxito')
   }
 }
