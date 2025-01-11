@@ -67,7 +67,9 @@ export default class UserRepository extends UserJSONFileManager {
         email: payload.email,
         password: payload.password,
         username: payload.username,
-        birthdate: payload.birthdate
+        birthdate: payload.birthdate,
+        nombre: payload.nombre,
+        estado: payload.estado
     })
   }
 
@@ -114,6 +116,10 @@ export default class UserRepository extends UserJSONFileManager {
     }
     let hashPass = await this.bcryptHash.genPasswordHash(newData.password)
     user.set("password", hashPass)
+
+    // Excluir password
+    const { password, ...userData } = newData
+    user.set(userData)
     return user.save()
   }
 }

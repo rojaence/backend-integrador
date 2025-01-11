@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { UserService } from "./service";
-import { TCreateUserDTO, TPutUserData } from "../../interfaces/User.interface";
+import { TPutUserData } from "../../interfaces/User.interface";
 import { UserCreateModel } from "../../models/User";
 
 

@@ -1,5 +1,5 @@
 import { CodesHttpEnum } from '../../enums/codesHttpEnums'
-import { TCreateUserDTO, TPutUserData } from '../../interfaces/User.interface'
+import { TPutUserData } from '../../interfaces/User.interface'
 import { UserCreateModel } from '../../models/User'
 import { HttpResponse } from '../../utils/httpResponse'
 import UserRepository from './repository'

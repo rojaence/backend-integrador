@@ -28,6 +28,7 @@ export class AuthService {
       const newUser = await this._userRepository.CreateUser(userData)
       return HttpResponse.response(CodesHttpEnum.created, newUser, 'Usuario creado con éxito')
     } catch (error) {
+      console.log(error)
       throw new Error("Error en autenticación")
     }
   }

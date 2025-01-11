@@ -11,6 +11,8 @@ interface IUserModel extends Model<InferAttributes<IUserModel>, InferCreationAtt
   // Some fields are optional when calling UserModel.create() or UserModel.build()
   id: CreationOptional<number>
   birthdate: string
+  nombre: string
+  estado?: number
 }
 
 export type UserCreateModel = Optional<IUserModel, "id">
@@ -47,6 +49,14 @@ export const User = db.define<IUserModel>('User', {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
+    nombre: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    estado: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }
   },
   {
     hooks: {
