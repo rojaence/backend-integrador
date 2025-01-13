@@ -1,6 +1,7 @@
 import { CodesHttpEnum } from "../../enums/codesHttpEnums";
 import ApiException from "../../exceptions/ApiException";
 import { UserCreateModel } from "../../models/User";
+import { UsuarioCreationAttributes }  from "../../models/init-models"
 import { HttpResponse } from "../../utils/httpResponse";
 import UserRepository from "../user/repository";
 import AuthRepository from "./repository";
@@ -13,7 +14,7 @@ export class AuthService {
     this._authRepository = new AuthRepository()
     this._userRepository = new UserRepository()
   }
-  async registerService(userData: UserCreateModel) {
+  async registerService(userData: UsuarioCreationAttributes) {
     try {
       const existingUser = await this._userRepository.FindUserByUsername(userData.username)
       if (existingUser) {
@@ -28,7 +29,9 @@ export class AuthService {
       const newUser = await this._userRepository.CreateUser(userData)
       return HttpResponse.response(CodesHttpEnum.created, newUser, 'Usuario creado con éxito')
     } catch (error) {
-      console.log(error)
+      if (error instanceof ApiException) {
+        return HttpResponse.response(error.statusCode, "Error en autenticación", error.message)
+      }
       throw new Error("Error en autenticación")
     }
   }
@@ -41,6 +44,7 @@ export class AuthService {
       if (error instanceof ApiException) {
         return HttpResponse.response(error.statusCode, null, error.message)
       }
+      console.log(error)
       throw new Error("Error en autenticación")
     }
   }

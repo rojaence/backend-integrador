@@ -2,17 +2,15 @@ import UserJSONFileManager from '../../utils/userJSONDatabase';
 import { IUser } from '../../interfaces/Auth.interface';
 import { TCreateUserDTO, TPutUserData } from '../../interfaces/User.interface';
 import BcryptHash from '../../utils/bcryptHash';
-import { User, UserCreateModel } from '../../models/User';
 import ApiException from '../../exceptions/ApiException';
 import { CodesHttpEnum } from '../../enums/codesHttpEnums';
+import { UsuarioCreationAttributes, UsuarioScopes } from '../../models/Usuario';
+import { models } from '../../database/config/initDatabase';
 
 export default class UserRepository extends UserJSONFileManager {
-  
-  private bcryptHash;
 
   constructor() {
     super()
-    this.bcryptHash = new BcryptHash()
   }
   
   async getUsers(): Promise<IUser[]> {
@@ -23,7 +21,7 @@ export default class UserRepository extends UserJSONFileManager {
     const users = await this.readUsers();
     const newId = await this.getNewId()
 
-    const passwordHash = await this.bcryptHash.genPasswordHash(user.password)
+    const passwordHash = await BcryptHash.genPasswordHash(user.password)
 
     const newUser = {
       id: newId,
@@ -51,7 +49,7 @@ export default class UserRepository extends UserJSONFileManager {
   async putUser(id: number, newData: TPutUserData) {
     const users = await this.readUsers()
     const userIndex = users.findIndex(u => u.id === id)
-    const password = await this.bcryptHash.genPasswordHash(newData.password)
+    const password = await BcryptHash.genPasswordHash(newData.password)
     const newUserData = {
       id,
       ...newData,
@@ -62,19 +60,19 @@ export default class UserRepository extends UserJSONFileManager {
     return newUserData
   }
 
-  async CreateUser(payload: UserCreateModel){
-    return User.create({
-        email: payload.email,
-        password: payload.password,
-        username: payload.username,
-        birthdate: payload.birthdate,
-        nombre: payload.nombre,
-        estado: payload.estado
-    })
+  async CreateUser(payload: UsuarioCreationAttributes) {
+    const user = await models.Usuario.create(payload)
+    return {
+      name: user.nombre,
+      email: user.email,
+      estado: user.estado,
+      username: user.username,
+      birthdate: user.birthdate
+    }
   }
 
   async FindUserByEmail(email: string) {
-      return User.findOne({
+      return models.Usuario.findOne({
           where: {
             email
           }
@@ -82,7 +80,7 @@ export default class UserRepository extends UserJSONFileManager {
   }
 
   async FindUserByUsername(username: string) {
-    return User.findOne({
+    return models.Usuario.findOne({
         where: {
           username
         }
@@ -90,11 +88,11 @@ export default class UserRepository extends UserJSONFileManager {
   }
 
   async GetUsers() {
-    return User.findAll()
+    return models.Usuario.scope(UsuarioScopes.GetUserProfile).findAll()
   }
 
   async GetById(id: number) {
-    return User.findOne({
+    return models.Usuario.scope(UsuarioScopes.GetUserProfile).findOne({
       where: {
         id
       }
@@ -102,7 +100,7 @@ export default class UserRepository extends UserJSONFileManager {
   }
 
   async DeleteUser(id: number) {
-    return User.destroy({
+    return models.Usuario.destroy({
       where: {
         id
       }
@@ -114,12 +112,14 @@ export default class UserRepository extends UserJSONFileManager {
     if (!user) {
       throw new ApiException("No se encontró un usuario con el id proporcionado", CodesHttpEnum.notFound)
     }
-    let hashPass = await this.bcryptHash.genPasswordHash(newData.password)
+    let hashPass = await BcryptHash.genPasswordHash(newData.password)
     user.set("password", hashPass)
 
     // Excluir password
     const { password, ...userData } = newData
     user.set(userData)
-    return user.save()
+    await user.save()
+    const updatedUser = await models.Usuario.scope(UsuarioScopes.GetUserProfile).findByPk(id)
+    return updatedUser
   }
 }

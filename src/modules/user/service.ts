@@ -1,12 +1,12 @@
 import { CodesHttpEnum } from '../../enums/codesHttpEnums'
 import { TPutUserData } from '../../interfaces/User.interface'
 import { UserCreateModel } from '../../models/User'
+import { UsuarioCreationAttributes }  from "../../models/init-models"
 import { HttpResponse } from '../../utils/httpResponse'
 import UserRepository from './repository'
 
 export class UserService {
   private readonly _userRepository: UserRepository
-
   constructor() {
     this._userRepository = new UserRepository()
   }
@@ -16,7 +16,7 @@ export class UserService {
     return HttpResponse.response(CodesHttpEnum.ok, users)
   }
 
-  async createUser(data: UserCreateModel) {
+  async createUser(data: UsuarioCreationAttributes) {
     const existingUser = await this._userRepository.FindUserByUsername(data.username)
     if (existingUser) {
       return HttpResponse.response(CodesHttpEnum.badRequest, 'Error al crear usuario', 'El usuario ya existe')

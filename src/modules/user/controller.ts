@@ -2,6 +2,7 @@ import { Request } from "express";
 import { UserService } from "./service";
 import { TPutUserData } from "../../interfaces/User.interface";
 import { UserCreateModel } from "../../models/User";
+import { UsuarioCreationAttributes }  from "../../models/init-models"
 
 
 export const GetController = async (req: Request) => {
@@ -9,13 +10,14 @@ export const GetController = async (req: Request) => {
     const response = await new UserService().getUsers()
     return response
   } catch (error) {
+    console.log(error)
     throw error
   }
 }
 
 export const CreateController = async (req: Request) => {
   try {
-    const createUserDTO = req.body as UserCreateModel
+    const createUserDTO = req.body as UsuarioCreationAttributes
     const response = await new UserService().createUser(createUserDTO)
     return response
   } catch (error) {

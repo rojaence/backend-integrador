@@ -1,5 +1,5 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, ModelDefined, Optional } from "sequelize";
-import db from "../config/dbOrm";
+import { CreateOptions, CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, ModelDefined, Optional, Sequelize } from "sequelize";
+import db from "../database/config/dbOrm";
 import { IUser } from "../interfaces/Auth.interface";
 import BcryptHash from "../utils/bcryptHash";
 
@@ -17,8 +17,6 @@ interface IUserModel extends Model<InferAttributes<IUserModel>, InferCreationAtt
 
 export type UserCreateModel = Optional<IUserModel, "id">
 
-const bcryptHash = new BcryptHash()
-
 /* 
   Esta forma de definir el modelo permite el typechecking de las propiedades 
   accediendo directamente a ellas desde una instancia de este modelo
@@ -35,7 +33,7 @@ export const User = db.define<IUserModel>('User', {
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
@@ -60,13 +58,18 @@ export const User = db.define<IUserModel>('User', {
   },
   {
     hooks: {
-      beforeCreate: async (record: IUserModel, options) => {
-        let hashPass = await bcryptHash.genPasswordHash(record.password)
+      beforeCreate: async (record: IUserModel) => {
+        let hashPass = await BcryptHash.genPasswordHash(record.password)
         record.password = hashPass
       },
     },
     scopes: {
       deletePassword: {
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt"]
+        }    
+      },
+      getUserProfile: {
         attributes: {
           exclude: ["password", "createdAt", "updatedAt"]
         }    

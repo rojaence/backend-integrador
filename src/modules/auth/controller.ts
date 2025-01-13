@@ -2,10 +2,11 @@ import {  Request } from 'express'
 import { ICredential } from '../../interfaces/Auth.interface'
 import { AuthService } from './service'
 import { UserCreateModel } from '../../models/User'
+import { UsuarioCreationAttributes }  from "../../models/init-models"
 
 export const RegisterController = async (req: Request) => {
   try {
-    const userData = req.body as UserCreateModel
+    const userData = req.body as UsuarioCreationAttributes
     const response = await new AuthService().registerService(userData)
     return response
   } catch (error) {

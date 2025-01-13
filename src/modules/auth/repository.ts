@@ -9,13 +9,10 @@ import { CodesHttpEnum } from "../../enums/codesHttpEnums";
 import UserRepository from "../user/repository";
 
 export default class AuthRepository extends UserJSONFileManager {
-
-  private bcryptHash;
   private readonly _userRepository
 
   constructor() {
     super()
-    this.bcryptHash = new BcryptHash()
     this._userRepository = new UserRepository()
   }
 
@@ -23,12 +20,13 @@ export default class AuthRepository extends UserJSONFileManager {
     const users = await this.readUsers();
     const newId = await this.getNewId()
 
-    const passwordHash = await this.bcryptHash.genPasswordHash(user.password)
+    const passwordHash = await BcryptHash.genPasswordHash(user.password)
 
     const newUser = {
       id: newId,
       ...user,
       password: passwordHash,
+      
     }
     users.push(newUser);
     await this.writeUsers(users);
@@ -40,7 +38,7 @@ export default class AuthRepository extends UserJSONFileManager {
     if (!userDB) {
       throw new ApiException('El usuario no existe', CodesHttpEnum.notFound)
     }
-    const passwordChecked = await this.bcryptHash.chechPasswordHash(password, userDB.password)
+    const passwordChecked = await BcryptHash.chechPasswordHash(password, userDB.password)
 
     if (!passwordChecked) {
       throw new ApiException('Credenciales incorrectas', CodesHttpEnum.unauthorized)
@@ -58,7 +56,7 @@ export default class AuthRepository extends UserJSONFileManager {
     if (!userDB) {
       throw new ApiException('El usuario no existe', CodesHttpEnum.notFound)
     }
-    const passwordChecked = await this.bcryptHash.chechPasswordHash(password, userDB.password)
+    const passwordChecked = await BcryptHash.chechPasswordHash(password, userDB.password)
 
     if (!passwordChecked) {
       throw new ApiException('Credenciales incorrectas', CodesHttpEnum.unauthorized)
