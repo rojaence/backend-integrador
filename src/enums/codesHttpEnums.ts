@@ -5,5 +5,5 @@ export enum CodesHttpEnum {
   forbidden = 403,
   notFound = 404,
   internalServerError = 500,
-  unauthorized = 401
+  unauthorized = 401,
 }

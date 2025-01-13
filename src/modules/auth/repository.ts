@@ -62,7 +62,9 @@ export default class AuthRepository extends UserJSONFileManager {
       throw new ApiException('Credenciales incorrectas', CodesHttpEnum.unauthorized)
     }
 
-    const token = sign({ username: userDB.username }, JWT_SECRET)
+    const token = sign({ username: userDB.username }, JWT_SECRET, {
+      expiresIn: "1h"
+    })
     return {
       username: userDB.username,
       token

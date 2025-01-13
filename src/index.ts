@@ -4,6 +4,7 @@ import authRoutes from "./modules/auth/routes"
 import userRoutes from "./modules/user/routes"
 import { ValidationError } from 'express-validation'
 import { database } from './database/config/initDatabase'
+import { jwtTokenMiddleware } from './middleware/jwtTokenMiddleware'
 // import db from './database/config/dbOrm'
 // import { initModels } from './models/init-models'
 
@@ -48,9 +49,14 @@ main()
 
 const prefix = "/api"
 app.use(`${prefix}/auth`, authRoutes)
-app.use(`${prefix}/users`, userRoutes)
+app.use(`${prefix}/users`, jwtTokenMiddleware, userRoutes)
 
 app.use(function(err: any, req: Request, res: Response, next: NextFunction) {
+
+  if (res.headersSent) {
+    return
+  }
+
   if (err instanceof ValidationError) {
     return res.status(err.statusCode).json(err)
   }
