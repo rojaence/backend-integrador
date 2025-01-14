@@ -5,6 +5,11 @@ import userRoutes from "./modules/user/routes"
 import { ValidationError } from 'express-validation'
 import { database } from './database/config/initDatabase'
 import { jwtTokenMiddleware } from './middleware/jwtTokenMiddleware'
+import swaggerUI from 'swagger-ui-express'
+import YAML from 'yamljs'
+const swaggerDocument = YAML.load('./src/config/swagger.config.yaml')
+
+
 // import db from './database/config/dbOrm'
 // import { initModels } from './models/init-models'
 
@@ -50,6 +55,9 @@ main()
 const prefix = "/api"
 app.use(`${prefix}/auth`, authRoutes)
 app.use(`${prefix}/users`, jwtTokenMiddleware, userRoutes)
+
+// Swagger UI
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(function(err: any, req: Request, res: Response, next: NextFunction) {
 

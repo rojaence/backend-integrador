@@ -7,6 +7,7 @@ import { loginValidation, registerValidation } from "./validations";
 
 const routes = Router()
 
+
 routes.post('/register', 
   validate(registerValidation, {}, {}) as any,
   async (req: Request, res: Response, next: NextFunction) => {
