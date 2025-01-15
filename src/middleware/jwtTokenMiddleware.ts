@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { CodesHttpEnum } from '../enums/codesHttpEnums'
-import { verify } from 'jsonwebtoken'
+import { TokenExpiredError, verify } from 'jsonwebtoken'
 import { JWT_SECRET } from '../environment/env'
 import { HttpResponse } from '../utils/httpResponse'
 
@@ -17,6 +17,11 @@ export const jwtTokenMiddleware = (req: Request, res: Response, next: NextFuncti
     }
     verify(token!, JWT_SECRET, (err, decoded) => {
       if (err) {
+        if (err instanceof TokenExpiredError) {
+          return res
+            .status(CodesHttpEnum.unauthorized)
+            .json(HttpResponse.fail(res, CodesHttpEnum.unauthorized, "La sesión ha expirado"))
+        }
         res
         .status(CodesHttpEnum.forbidden)
         .json(HttpResponse.fail(res, CodesHttpEnum.forbidden, "Error", "Autenticación no válida"))
