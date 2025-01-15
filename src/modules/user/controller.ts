@@ -1,7 +1,6 @@
 import { Request } from "express";
 import { UserService } from "./service";
 import { TPutUserData } from "../../interfaces/User.interface";
-import { UserCreateModel } from "../../models/User";
 import { UsuarioCreationAttributes }  from "../../models/init-models"
 
 

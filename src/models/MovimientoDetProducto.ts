@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { MovimientoCab, MovimientoCabId } from './MovimientoCab';
-import type { Producto, ProductoId } from './Producto';
+import type { Product, ProductId } from './Product';
 
 export interface MovimientoDetProductoAttributes {
   movidetProdId: number;
@@ -41,10 +41,10 @@ export class MovimientoDetProducto extends Model<MovimientoDetProductoAttributes
   setMovicab!: Sequelize.BelongsToSetAssociationMixin<MovimientoCab, MovimientoCabId>;
   createMovicab!: Sequelize.BelongsToCreateAssociationMixin<MovimientoCab>;
   // MovimientoDetProducto belongsTo Producto via productoId
-  producto!: Producto;
-  getProducto!: Sequelize.BelongsToGetAssociationMixin<Producto>;
-  setProducto!: Sequelize.BelongsToSetAssociationMixin<Producto, ProductoId>;
-  createProducto!: Sequelize.BelongsToCreateAssociationMixin<Producto>;
+  producto!: Product;
+  getProducto!: Sequelize.BelongsToGetAssociationMixin<Product>;
+  setProducto!: Sequelize.BelongsToSetAssociationMixin<Product, ProductId>;
+  createProducto!: Sequelize.BelongsToCreateAssociationMixin<Product>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof MovimientoDetProducto {
     return sequelize.define('MovimientoDetProducto', {

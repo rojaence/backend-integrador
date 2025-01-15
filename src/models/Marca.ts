@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { Producto, ProductoId } from './Producto';
+import type { Product, ProductId } from './Product';
 
 export interface MarcaAttributes {
   marcaId: number;
@@ -27,16 +27,16 @@ export class Marca extends Model<MarcaAttributes, MarcaCreationAttributes> imple
   usuIdAct?: number;
 
   // Marca hasMany Producto via marcaId
-  productos!: Producto[];
-  getProductos!: Sequelize.HasManyGetAssociationsMixin<Producto>;
-  setProductos!: Sequelize.HasManySetAssociationsMixin<Producto, ProductoId>;
-  addProducto!: Sequelize.HasManyAddAssociationMixin<Producto, ProductoId>;
-  addProductos!: Sequelize.HasManyAddAssociationsMixin<Producto, ProductoId>;
-  createProducto!: Sequelize.HasManyCreateAssociationMixin<Producto>;
-  removeProducto!: Sequelize.HasManyRemoveAssociationMixin<Producto, ProductoId>;
-  removeProductos!: Sequelize.HasManyRemoveAssociationsMixin<Producto, ProductoId>;
-  hasProducto!: Sequelize.HasManyHasAssociationMixin<Producto, ProductoId>;
-  hasProductos!: Sequelize.HasManyHasAssociationsMixin<Producto, ProductoId>;
+  productos!: Product[];
+  getProductos!: Sequelize.HasManyGetAssociationsMixin<Product>;
+  setProductos!: Sequelize.HasManySetAssociationsMixin<Product, ProductId>;
+  addProducto!: Sequelize.HasManyAddAssociationMixin<Product, ProductId>;
+  addProductos!: Sequelize.HasManyAddAssociationsMixin<Product, ProductId>;
+  createProducto!: Sequelize.HasManyCreateAssociationMixin<Product>;
+  removeProducto!: Sequelize.HasManyRemoveAssociationMixin<Product, ProductId>;
+  removeProductos!: Sequelize.HasManyRemoveAssociationsMixin<Product, ProductId>;
+  hasProducto!: Sequelize.HasManyHasAssociationMixin<Product, ProductId>;
+  hasProductos!: Sequelize.HasManyHasAssociationsMixin<Product, ProductId>;
   countProductos!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Marca {

@@ -45,3 +45,50 @@ paths:
             application/json:
               schema:
                 type: object
+
+  /api/categories:
+    get:
+      description: Get categories
+      tags:
+        - Category
+      responses:
+        '200':
+          description: login
+          content:
+            application/json:
+              schema:
+                type: object
+
+    post:
+      description: Register a new category
+      tags:
+        - Category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: name
+                  example: "category"
+                description:
+                  type: string
+                  description: description
+                  example: "lorem ipsum"
+      responses:
+        '200':
+          description: create category
+          content:
+            application/json:
+              schema:
+                type: object
+
+        '400':
+          description: category name exists
+          content:
+            application/json:
+              schema:
+                type: object
