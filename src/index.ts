@@ -3,6 +3,7 @@ import { PORT } from './environment/env'
 import authRoutes from "./modules/auth/routes"
 import userRoutes from "./modules/user/routes"
 import categoryRoutes from "./modules/category/routes"
+import productRoutes from "./modules/product/routes"
 import { ValidationError } from 'express-validation'
 import { database } from './database/config/initDatabase'
 import { jwtTokenMiddleware } from './middleware/jwtTokenMiddleware'
@@ -57,6 +58,7 @@ const prefix = "/api"
 app.use(`${prefix}/auth`, authRoutes)
 app.use(`${prefix}/users`, jwtTokenMiddleware, userRoutes)
 app.use(`${prefix}/categories`, jwtTokenMiddleware, categoryRoutes)
+app.use(`${prefix}/products`, jwtTokenMiddleware, productRoutes)
 
 // Swagger UI
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));

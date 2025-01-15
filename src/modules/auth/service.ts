@@ -1,6 +1,5 @@
 import { CodesHttpEnum } from "../../enums/codesHttpEnums";
 import ApiException from "../../exceptions/ApiException";
-import { UserCreateModel } from "../../models/User";
 import { UsuarioCreationAttributes }  from "../../models/init-models"
 import { HttpResponse } from "../../utils/httpResponse";
 import UserRepository from "../user/repository";
