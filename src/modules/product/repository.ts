@@ -1,5 +1,6 @@
 import { Product, ProductCreationAttributes } from "../../models/Product";
 import { models } from "../../database/config/initDatabase";
+import { Op } from "sequelize";
 
 export default class ProductRepository {
 
@@ -23,7 +24,9 @@ export default class ProductRepository {
   async FindByName(name: string): Promise<Product | null> {
     const existing = await models.Product.findOne({
       where: {
-        name
+        name: {
+          [Op.iLike]: `%${name}`
+        }
       }
     })
     return existing

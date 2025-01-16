@@ -1,5 +1,6 @@
 import { Category, CategoryCreationAttributes } from "../../models/Category";
 import { models } from "../../database/config/initDatabase";
+import { Op } from "sequelize";
 
 export default class CategoryRepository {
 
@@ -23,7 +24,9 @@ export default class CategoryRepository {
   async FindByName(name: string): Promise<Category | null> {
     const existing = await models.Category.findOne({
       where: {
-        name
+        name: {
+          [Op.iLike]: `%${name}`
+        }
       }
     })
     return existing
