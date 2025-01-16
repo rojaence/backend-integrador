@@ -21,8 +21,8 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
   status!: boolean;
 
   // Categoria hasMany Producto via categoriaId
-  // products!: Product[];
-  // getProducts!: Sequelize.HasManyGetAssociationsMixin<Product>;
+  products!: Product[];
+  getProducts!: Sequelize.HasManyGetAssociationsMixin<Product>;
   // setProducts!: Sequelize.HasManySetAssociationsMixin<Product, ProductId>;
   // addProduct!: Sequelize.HasManyAddAssociationMixin<Product, ProductId>;
   // addProducts!: Sequelize.HasManyAddAssociationsMixin<Product, ProductId>;

@@ -1,18 +1,18 @@
-import { Product, ProductCreationAttributes } from "../../models/Product";
+import { Product, ProductCreationAttributes, ProductScopes } from "../../models/Product";
 import { models } from "../../database/config/initDatabase";
 import { Op } from "sequelize";
 
 export default class ProductRepository {
 
   async GetAll(): Promise<Product[]> {
-    return models.Product.findAll();
+    return models.Product.scope(ProductScopes.ProductDetails).findAll();
   }
 
   async GetById(id: number): Promise<Product | null> {
-    return models.Product.findOne({
+    return models.Product.scope(ProductScopes.ProductDetails).findOne({
       where: {
         id
-      }
+      },
     })
   }
 

@@ -1,5 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import { Category } from './Category';
+import { models } from '../database/config/initDatabase';
 // import type { Categoria, CategoriaId } from './Categoria';
 // import type { Marca, MarcaId } from './Marca';
 // import type { MovimientoDetProducto, MovimientoDetProductoId } from './MovimientoDetProducto';
@@ -18,6 +20,10 @@ export type ProductId = Product[ProductPk];
 export type ProductOptionalAttributes = "id" | "categoryId";
 export type ProductCreationAttributes = Optional<ProductAttributes, ProductOptionalAttributes>;
 
+export enum ProductScopes {
+  ProductDetails = 'productDetails'
+}
+
 export class Product extends Model<ProductAttributes, ProductCreationAttributes> implements ProductAttributes {
   id!: number
   name!: string
@@ -27,8 +33,8 @@ export class Product extends Model<ProductAttributes, ProductCreationAttributes>
   description?: string
 
   // Producto belongsTo Categoria via categoriaId
-  // categorium!: Categoria;
-  // getCategorium!: Sequelize.BelongsToGetAssociationMixin<Categoria>;
+  category!: Category;
+  getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>;
   // setCategorium!: Sequelize.BelongsToSetAssociationMixin<Categoria, CategoriaId>;
   // createCategorium!: Sequelize.BelongsToCreateAssociationMixin<Categoria>;
   // Producto belongsTo Marca via marcaId
@@ -50,7 +56,7 @@ export class Product extends Model<ProductAttributes, ProductCreationAttributes>
   // countMovimientoDetProductos!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Product {
-    return sequelize.define('Producto', {
+    return sequelize.define('Product', {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,

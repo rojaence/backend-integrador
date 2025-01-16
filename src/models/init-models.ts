@@ -27,7 +27,7 @@ import { Opcion as _Opcion } from "./Opcion";
 import type { OpcionAttributes, OpcionCreationAttributes } from "./Opcion";
 import { Pais as _Pais } from "./Pais";
 import type { PaisAttributes, PaisCreationAttributes } from "./Pais";
-import { Product as _Product } from "./Product";
+import { Product as _Product, ProductScopes } from "./Product";
 import type { ProductAttributes, ProductCreationAttributes } from "./Product";
 import { Proveedor as _Proveedor } from "./Proveedor";
 import type { ProveedorAttributes, ProveedorCreationAttributes } from "./Proveedor";
@@ -164,8 +164,8 @@ export function initModels(sequelize: Sequelize) {
   // const MovimientoDetProducto = _MovimientoDetProducto.initModel(sequelize);
   // const MovimientoDetPagos = _MovimientoDetPagos.initModel(sequelize);
 
-  Product.belongsTo(Category, { as: "category", foreignKey: "categoryId"});
-  Category.hasMany(Product, { as: "products", foreignKey: "categoryId"});
+  Product.belongsTo(Category, { as: 'category' });
+  Category.hasMany(Product, { as: 'products', foreignKey: "categoryId"});
   // Empresa.belongsTo(Ciudad, { as: "ciudad", foreignKey: "ciudadId"});
   // Ciudad.hasMany(Empresa, { as: "empresas", foreignKey: "ciudadId"});
   // MovimientoCab.belongsTo(Cliente, { as: "cliente", foreignKey: "clienteId"});
@@ -216,6 +216,17 @@ export function initModels(sequelize: Sequelize) {
   // Usuario.hasMany(UsuarioPermiso, { as: "usuarioPermisos", foreignKey: "id"});
   // UsuarioRol.belongsTo(Usuario, { as: "usu", foreignKey: "id"});
   // Usuario.hasMany(UsuarioRol, { as: "usuarioRols", foreignKey: "id"});
+
+  Product.addScope(ProductScopes.ProductDetails, {
+    attributes: {
+      exclude: ["categoryId"],
+    },
+    include: {
+      model: Category,
+      attributes: ['id', 'name'],
+      as: 'category'
+    }
+  })
 
   return {
     Category: Category,

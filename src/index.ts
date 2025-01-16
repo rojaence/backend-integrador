@@ -46,7 +46,7 @@ async function main() {
     */
     await database.sequelize.authenticate()
     await database.sequelize.sync({alter: true})
-    const users = await database.models.Usuario.findAll()
+    
     console.log('Conexión establecida con la base de datos');
   } catch (error) {
     console.error('Ocurrió un error al conectarse con la base de datos:', error);
