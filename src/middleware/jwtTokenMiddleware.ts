@@ -3,6 +3,7 @@ import { CodesHttpEnum } from '../enums/codesHttpEnums'
 import { TokenExpiredError, verify } from 'jsonwebtoken'
 import { JWT_SECRET } from '../environment/env'
 import { HttpResponse } from '../utils/httpResponse'
+import { ITokenDecoded } from '../interfaces/Auth.interface'
 
 export const jwtTokenMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -29,7 +30,24 @@ export const jwtTokenMiddleware = (req: Request, res: Response, next: NextFuncti
       }
       next()
     })
+
+    // TODO: INVESTIGAR COMO IMPLEMENTAR DE FORMA CORRECTA LA SIGUIENTE SINTAXIS
+
+    // const validated: ITokenDecoded = verify(token!, JWT_SECRET) as ITokenDecoded
+    // const now = Math.floor(Date.now() / 1000)
+    // if (!validated) {
+    //   res
+    //     .status(CodesHttpEnum.unauthorized)
+    //     .json(HttpResponse.response(CodesHttpEnum.unauthorized, "Autenticación no válida"))
+    // }
+    // if (validated.exp < now) {
+    //   res
+    //     .status(CodesHttpEnum.unauthorized)
+    //     .json(HttpResponse.response(CodesHttpEnum.unauthorized, "La sesión ha expirado"))
+    // }
+    // next()
   } catch (error) {
     next(error)
+    // throw error
   }
 }
