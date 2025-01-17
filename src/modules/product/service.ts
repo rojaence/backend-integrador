@@ -4,6 +4,7 @@ import { ProductCreationAttributes, ProductPutAttributes } from "../../models/Pr
 import { HttpResponse } from "../../utils/httpResponse"
 import ProductRepository from "./repository"
 import CategoryRepository from "../category/repository";
+import { ProductQueryParams } from "../common/intefaces"
 
 export class ProductService {
 
@@ -14,8 +15,8 @@ export class ProductService {
     this._categoryRepository = new CategoryRepository()
   }
 
-  async getProducts() {
-    let products = await this._productRepository.GetAll()
+  async getProducts(query: ProductQueryParams) {
+    let products = await this._productRepository.GetAll(query)
     return HttpResponse.response(CodesHttpEnum.ok, products)
   }
 

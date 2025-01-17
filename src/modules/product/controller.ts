@@ -3,11 +3,16 @@ import { ProductService } from "./service";
 import { ProductCreationAttributes }  from "../../models/init-models"
 import { Product, ProductPutAttributes } from "../../models/Product";
 import { DeleteModelType } from "../../constants";
+import { ProductQueryParams } from "../common/intefaces";
 
 
 export const GetController = async (req: Request) => {
   try {
-    const response = await new ProductService().getProducts()
+    const status = req.query.status as string
+    const queryParams: ProductQueryParams = {
+      status: status ? status.toUpperCase() === 'TRUE' : undefined
+    }
+    const response = await new ProductService().getProducts(queryParams)
     return response
   } catch (error) {
     console.log(error)

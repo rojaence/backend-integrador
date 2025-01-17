@@ -3,11 +3,16 @@ import { models } from "../../database/config/initDatabase";
 import { Op } from "sequelize";
 import ApiException from "../../exceptions/ApiException";
 import { CodesHttpEnum } from "../../enums/codesHttpEnums";
+import { ProductQueryParams } from "../common/intefaces";
 
 export default class ProductRepository {
 
-  async GetAll(): Promise<Product[]> {
-    return models.Product.scope(ProductScopes.ProductDetails).findAll();
+  async GetAll(query: ProductQueryParams): Promise<Product[]> {
+    return models.Product.scope(ProductScopes.ProductDetails).findAll({
+      where: {
+        ...(query.status !== undefined ? { status: query.status } : {})
+      }
+    });
   }
 
   async GetById(id: number): Promise<Product | null> {
