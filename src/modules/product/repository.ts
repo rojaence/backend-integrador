@@ -1,6 +1,8 @@
-import { Product, ProductCreationAttributes, ProductScopes } from "../../models/Product";
+import { Product, ProductAttributes, ProductCreationAttributes, ProductPutAttributes, ProductScopes } from "../../models/Product";
 import { models } from "../../database/config/initDatabase";
 import { Op } from "sequelize";
+import ApiException from "../../exceptions/ApiException";
+import { CodesHttpEnum } from "../../enums/codesHttpEnums";
 
 export default class ProductRepository {
 
@@ -30,5 +32,35 @@ export default class ProductRepository {
       }
     })
     return existing
+  }
+
+  async PutProduct(id: number, payload: ProductPutAttributes) {
+    const product = await this.GetById(id)
+    if (!product) {
+      throw new ApiException("No se encontró un producto con el id proporcionado", CodesHttpEnum.notFound)
+    }
+    product.set(payload)
+    await product.save()
+    const updatedProduct = await models.Product.scope(ProductScopes.ProductDetails).findByPk(id)
+    return updatedProduct
+  }
+
+  async DeleteLogicProduct(id: number) {
+    const product = await this.GetById(id)
+    if (!product) {
+      throw new ApiException("No se encontró un producto con el id proporcionado", CodesHttpEnum.notFound)
+    }
+    product.set({
+      status: false
+    })
+    await product.save()
+  }
+
+  async DeletePhysicalProduct(id: number) {
+    return models.Product.destroy({
+      where: {
+        id
+      }
+    })
   }
 }

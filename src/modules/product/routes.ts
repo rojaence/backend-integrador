@@ -1,10 +1,11 @@
 import { NextFunction, Router, Request, Response } from "express";
 import { HttpResponse } from "../../utils/httpResponse";
 import { CodesHttpEnum } from "../../enums/codesHttpEnums";
-import { CreateController, GetByIdController, GetController } from "./controller";
-import { createValidation } from "./validations";
+import { CreateController, DestroyController, GetByIdController, GetController, PutController } from "./controller";
+import { createValidation, putValidation } from "./validations";
 import { validate } from "express-validation";
 import { idParamValidation } from "../common/validations";
+import { DeleteModelType } from "../../constants";
 
 const routes = Router()
 
@@ -37,6 +38,48 @@ routes.get('/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const response = await GetByIdController(req)
+      res.status(response.code).json(response)
+    } catch (error) {
+      if (error instanceof Error) {
+        HttpResponse.fail(res, CodesHttpEnum.internalServerError, error.message)
+      }
+    }
+  }
+)
+
+routes.put('/:id',
+  validate(putValidation, {}, {}) as any,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await PutController(req)
+      res.status(response.code).json(response)
+    } catch (error) {
+      if (error instanceof Error) {
+        HttpResponse.fail(res, CodesHttpEnum.internalServerError, error.message)
+      }
+    }
+  }
+)
+
+routes.delete('/logic/:id',
+  validate(idParamValidation, {}, {}) as any,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await DestroyController(req, DeleteModelType.Logic)
+      res.status(response.code).json(response)
+    } catch (error) {
+      if (error instanceof Error) {
+        HttpResponse.fail(res, CodesHttpEnum.internalServerError, error.message)
+      }
+    }
+  }
+)
+
+routes.delete('/physical/:id',
+  validate(idParamValidation, {}, {}) as any,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await DestroyController(req, DeleteModelType.Physical)
       res.status(response.code).json(response)
     } catch (error) {
       if (error instanceof Error) {

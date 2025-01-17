@@ -6,4 +6,5 @@ export enum CodesHttpEnum {
   notFound = 404,
   internalServerError = 500,
   unauthorized = 401,
+  notModified = 304
 }

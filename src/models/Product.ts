@@ -20,6 +20,8 @@ export type ProductId = Product[ProductPk];
 export type ProductOptionalAttributes = "id" | "categoryId";
 export type ProductCreationAttributes = Optional<ProductAttributes, ProductOptionalAttributes>;
 
+export type ProductPutAttributes = Omit<ProductAttributes, "id">
+
 export enum ProductScopes {
   ProductDetails = 'productDetails'
 }
@@ -67,7 +69,7 @@ export class Product extends Model<ProductAttributes, ProductCreationAttributes>
         allowNull: false
       },
       price: {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.DOUBLE(10, 2),
         allowNull: false
       },
       status: {
@@ -78,6 +80,10 @@ export class Product extends Model<ProductAttributes, ProductCreationAttributes>
       categoryId: {
         type: DataTypes.INTEGER,
         allowNull: true,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true
       }
   }, {
     tableName: 'product',
